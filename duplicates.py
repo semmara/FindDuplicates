@@ -19,6 +19,7 @@ import argparse
 # * show duplicates only, if files still exist???
 # * ignore files with defined mime type
 # * identify mount points
+# * delete duplicated files
 
 
 args = {}
@@ -180,6 +181,16 @@ def indicate():
         print item
 
 
+# delete items
+# multiple selection
+# confirmation message
+# show list of files
+# select files to delete
+# check if duplicate is available/found
+def delete_items():
+    pass
+
+
 def list_of_all_files(folder):
     pass
 
@@ -276,10 +287,19 @@ def main():
     parser.add_argument('--max_size', type=int, default=1024**3, help='max size to read (in byte)')
     parser.add_argument('--hidden', action='store_true', help='also indicate hidden files')
     parser.add_argument('--dump', action='store_true', help='dump indication')
+    parser.add_argument('mode', default='INDICATE', help='INDICATE, LIST, DUMP')
     args = vars(parser.parse_args())
     print args
 
-    indicate()
+    if 'delete' in args['mode'].lower():
+        pass  # ids?
+    else:
+        if 'indicate' in args['mode'].lower():
+            indicate()
+        if 'list' in args['mode'].lower():
+            pass
+        if 'dump' in args['mode'].lower():
+            pass
 
 if __name__ == '__main__':
     main()
