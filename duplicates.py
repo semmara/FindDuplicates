@@ -74,11 +74,11 @@ class DB_Manager(object):
         @returns False if path already exists
         """
         cur = self.conn.cursor()
-        cur.execute('''SELECT i_id FROM %s WHERE path='%s' ''' % (self.name, path_))
+        cur.execute('''SELECT i_id FROM %s WHERE path="%s" ''' % (self.name, path_))
         for i in cur:
             return False
         cur.execute('''INSERT INTO %s (i_id, path, mtime, hash, mime, read_size, file_size)
-                    VALUES (NULL, '%s', %f, '%s','%s',%d,%d) ''' % (self.name, path_, mtime_, hash_, mime_, read_size_, file_size_))
+                    VALUES (NULL, "%s", %f, '%s','%s',%d,%d) ''' % (self.name, path_, mtime_, hash_, mime_, read_size_, file_size_))
         self.conn.commit()
         cur.close()
         return True
@@ -174,12 +174,6 @@ def indicate():
             itm.put_into_queue(fp)
     itm.wait_till_finished()
 
-    print "-----------------"
-    print "found duplicates:"
-    print ""
-    for item in dbm.get_duplicates():
-        print item
-
 
 # delete items
 # multiple selection
@@ -191,8 +185,11 @@ def delete_items():
     pass
 
 
-def list_of_all_files(folder):
-    pass
+def list_duplicate_files():
+    DB_Manager.db_file = args["database"]  # set in main function
+    dbm = DB_Manager()
+    for item in dbm.get_duplicates():
+        print item
 
 
 def read_mime_of_file(file_):
@@ -297,7 +294,7 @@ def main():
         if 'indicate' in args['mode'].lower():
             indicate()
         if 'list' in args['mode'].lower():
-            pass
+            list_duplicate_files()
         if 'dump' in args['mode'].lower():
             pass
 
